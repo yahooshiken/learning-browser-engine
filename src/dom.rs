@@ -1,26 +1,31 @@
-struct Node {
+use std::collections::HashMap;
+
+#[derive(Debug)]
+pub struct Node {
   // data common to all nodes.
-  children: Vec<Node>,
+  pub children: Vec<Node>,
   // data specific to each node type.
-  node_type: NodeType,
+  pub node_type: NodeType,
 }
 
-enum NodeType {
+#[derive(Debug)]
+pub enum NodeType {
   // You can See all node types here: https://dom.spec.whatwg.org/#dom-node-nodetype.
   // Element and Text are only implemented in this project for simplicity.
   Element(ElementData),
   Text(String),
 }
 
-struct ElementData {
+pub type AttrMap = HashMap<String, String>;
+
+#[derive(Debug)]
+pub struct ElementData {
   pub tag_name: String,
-  pub attributes: AttrMAp,
+  pub attributes: AttrMap,
 }
 
-type AttrMap = HashMap<String, String>;
-
 // Constructor function to make it easy to create new text nodes.
-fn text(data: String) -> Node {
+pub fn text(data: String) -> Node {
   Node {
     children: Vec::new(),
     node_type: NodeType::Text(data),
@@ -28,9 +33,12 @@ fn text(data: String) -> Node {
 }
 
 // Constructor function to make it easy to create new element nodes.
-fn elem(name: String, attrs: AttrMap, children: Vec<Node>) -> Node {
+pub fn elem(name: String, attrs: AttrMap, children: Vec<Node>) -> Node {
   Node {
     children: children,
-    node_type: NodeType::Element(ElementData{ tag_name: name, attributes: attrs}}),
+    node_type: NodeType::Element(ElementData {
+      tag_name: name,
+      attributes: attrs,
+    }),
   }
 }
